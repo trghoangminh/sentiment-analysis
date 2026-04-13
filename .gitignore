@@ -1,0 +1,50 @@
+# Environments
+.env
+.venv
+env/
+venv/
+venv_dl/
+ENV/
+env.bak/
+venv.bak/
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Pytest / Coverage
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Mac
+.DS_Store
+
+# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+frontend/dist/
+frontend/build/
+
+# ML specific outputs and data
+data/
+results/
+saved_models/
+*.ckpt
+*.pt
+*.pth
+*.h5
+*.keras
+*.onnx
+logs/
+mlruns/
+
+# IDEs
+.idea/
+.vscode/
+*.swp
+*.swo
+*.ipynb_checkpoints/
