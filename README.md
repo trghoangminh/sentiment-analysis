@@ -1,76 +1,100 @@
-# Diptronic Multi-lingual Sentiment Analysis (Deep Learning)
+# 🧠 Diptronic Multi-lingual Sentiment Analysis
 
-Đây là dự án Phân tích Sắc thái Ngôn ngữ (Sentiment Analysis) sử dụng Học Sâu (Deep Learning), đặc biệt tối ưu cho việc xử lý ngôn ngữ trên mạng xã hội (Sarcasm, Slang) ở cả **Tiếng Việt và Tiếng Anh**.
+<div align="center">
+  <img src="https://img.shields.io/badge/Python-3.9+-blue.svg" alt="Python">
+  <img src="https://img.shields.io/badge/FastAPI-005571?style=flat&logo=fastapi" alt="FastAPI">
+  <img src="https://img.shields.io/badge/PyTorch-EE4C2C?style=flat&logo=pytorch&logoColor=white" alt="PyTorch">
+  <img src="https://img.shields.io/badge/Transformers-HuggingFace-orange" alt="Transformers">
+</div>
 
-Hệ thống được xây dựng đè lên lõi Mạng nợ-ron `XLM-RoBERTa` tinh chỉnh bởi Đại học Cardiff, và có khả năng **Tự Huấn luyện (Fine-Tuning)** để "tiến hóa" thông minh hơn mỗi ngày.
+<br>
 
-## 🏗 Công nghệ sử dụng
-- **Backend Framework:** `FastAPI` + `Uvicorn` (Siêu nhẹ, tốc độ cao)
-- **Deep Learning Core:** `Transformers` (HuggingFace), `PyTorch`
-- **Mô hình gốc (Base Model):** `cardiffnlp/twitter-xlm-roberta-base-sentiment`
-- **Môi trường Web:** HTML/CSS thuần kết nối qua API Asynchronous.
+Dự án **Phân tích Sắc thái Ngôn ngữ (Sentiment Analysis)** ứng dụng Học Sâu (Deep Learning) và các mô hình ngôn ngữ lớn Transformer, được tối ưu hóa đặc biệt cho dữ liệu văn bản trên mạng xã hội (Sarcasm, Slang) hỗ trợ đa ngôn ngữ bao gồm **Tiếng Việt và Tiếng Anh**.
 
-## 🏗 Kiến trúc Dự án (MLOps Architecture)
+Hệ thống được phát triển dựa trên kiến trúc **XLM-RoBERTa** tinh chỉnh (fine-tuned) từ Đại học Cardiff, tích hợp khả năng **Tự Huấn luyện (Fine-Tuning Pipeline)** trực tiếp cho phép mô hình liên tục cập nhật và thích nghi với các từ ngữ, câu cú hoặc xu hướng mới.
 
-Hệ thống được thiết kế theo chuẩn phân tách dịch vụ (Microservices Pattern) của các tập đoàn Công nghệ lớn:
+---
+
+## ✨ Tính năng Nổi bật
+
+- **Kiến trúc MLOps chuyên nghiệp**: Cấu trúc phân tách rõ ràng giữa Frontend UI, Backend API và Machine Learning Engine. Dễ dàng triển khai thành các vi dịch vụ (Microservices).
+- **API Bất đồng bộ (Asynchronous) Tốc độ cao**: Xây dựng trên nền tảng cơ lõi **FastAPI** và Web Server Uvicorn cho phép xử lý hàng ngàn yêu cầu dự đoán với độ trễ cực thấp.
+- **Hỗ trợ Đa ngôn ngữ (English & Vietnamese)**: Đánh giá cực kỳ chính xác sắc thái câu chữ, khả năng đọc hiểu các ngữ cảnh phức tạp: từ lóng, khen ngược, mỉa mai, nói giảm nói tránh.
+- **Quy trình Huấn luyện Tự động**: Tích hợp sẵn Script để Fine-tune và Re-train mô hình với bộ dữ liệu tùy chỉnh.
+
+## 🏗 Kiến trúc Dự án (Architecture)
+
+Dự án áp dụng mô hình phân tách tầng lớp hiện đại:
 
 ```text
 sentiment-analysis-dl/
-├── app/                     # 🌐 Tầng Backend API: Chứa main.py định tuyến REST API (FastAPI).
-├── ml_engine/               # 🧠 Tầng MLOps: Chứa Lõi phân tích (predict.py) & Lò luyện (train.py).
-│   └── scripts/             # Kịch bản phụ trợ như máy nhân bản Data.
-├── frontend/                # 🎨 Tầng Giao diện UI: Chứa HTML/CSS/JS (tách biệt hoàn toàn với AI).
-├── data/                    # 📚 Tầng Dữ liệu: Nơi chứa File CSV để nạp vào Lò luyện.
-├── saved_models/            # 📦 Tầng Lưu trữ Não: Nơi cất giữ file Tạ (Weights) sau khi học xong.
-├── requirements.txt         # Thư viện môi trường
-└── README.md
+├── app/                     # 🌐 Tầng Backend: Khởi tạo REST API bằng FastAPI (main.py)
+├── ml_engine/               # 🧠 Tầng MLOps: Script dự đoán (predict.py) & huấn luyện (train.py)
+├── frontend/                # 🎨 Tầng UI: Giao diện người dùng thuần HTML/CSS/JS (index.html)
+├── data/                    # 📚 Tầng Dữ liệu: Chứa các file CSV để nạp vào quy trình huấn luyện
+├── saved_models/            # 📦 Tầng Lưu trữ: Nơi lưu trữ bộ trọng số (Weights) sau khi training
+└── requirements.txt         # ⚙️ Danh sách thư viện và dependencies cài đặt
 ```
 
----
+## 🚀 Hướng dẫn Cài đặt (Getting Started)
 
-## 🛠 Hướng dẫn Cài đặt & Khởi động Dự án
+### 1. Yêu cầu hệ thống
+* Python 3.9 trở lên
+* Git
 
-Đầu tiên, hãy mở Terminal (trên Mac/Linux) và trỏ vào thư mục chứa code:
+### 2. Cài đặt chi tiết
+
+Khởi động Terminal và trỏ vào thư mục chứa code của bạn:
 ```bash
-cd /Users/trghoangminh/Desktop/DDM/sentiment-analysis-dl
+cd /Users/trghoangminh/Desktop/sentiment-analysis-dl
 ```
 
-### Bước 1: Khởi tạo môi trường ảo (Virtual Environment)
+**Bước 2.1: Tạo môi trường ảo (Virtual Environment) để cô lập thư viện**
 ```bash
 python3 -m venv venv_dl
-source venv_dl/bin/activate
+source venv_dl/bin/activate  # Đối với macOS/Linux
+# venv_dl\Scripts\activate   # Đối với Windows
 ```
 
-### Bước 2: Cài đặt thư viện cốt lõi
+**Bước 2.2: Tải và cài đặt các thư viện lõi ML**
 ```bash
 pip install -r requirements.txt
 ```
-*(Lưu ý: Quá trình cài đặt PyTorch và Transformers có thể tốn vài phút tùy mạng).*
+*(Lưu ý: Quá trình cài đặt PyTorch và HuggingFace Transformers có thể mất 1-2 phút tùy thuộc vào tốc độ mạng, do bộ thư viện DL khá nặng).*
 
-### Bước 3: Khởi động Máy chủ Web API
+**Bước 2.3: Khởi động Web API & Backend**
 ```bash
-uvicorn src.main:app --port 8001
+uvicorn app.main:app --port 8001 --reload
 ```
-Sau đó Mở trình duyệt Web lên và truy cập: **[http://127.0.0.1:8001](http://127.0.0.1:8001)**
+Hoàn tất! Hãy mở trình duyệt Web và truy cập: **[http://127.0.0.1:8001](http://127.0.0.1:8001)** để trải nghiệm giao diện người dùng.
+
+🔗 **Tài liệu API Tự động (Swagger UI)** sẽ khả dụng tại: [http://127.0.0.1:8001/docs](http://127.0.0.1:8001/docs)
 
 ---
 
-## 🧠 Hướng dẫn Cày Level cho AI (Fine-Tuning)
+## 🛠 Hướng dẫn Tự Huấn luyện (Fine-Tuning Pipeline)
 
-Mặc dù Mô hình Tiêu chuẩn toàn cầu đã rất thông minh, nhưng đôi khi nó sẽ "ngơ" trước từ khóa Lóng (Slang) hoặc kiểu khen ngược (Sarcasm) đậm chất Việt Nam. Rất may mắn, bạn có thể TỰ DẠY LẠI nó chỉ trong 3 phút!
+Dù Transformer Models đã được cấu trúc tốt, nhưng do ngôn ngữ thay đổi liên tục, mô hình cần được học lại (Fine-tune) để nắm bắt biến thể GenZe hoặc các từ khoá hot trend. Bạn có thể tự cho AI đi học theo luồng sau:
 
-### Cách lấy dataset ra dạy AI:
-1. Mở file `data/processed/sarcasm_dataset.csv`.
-2. Gõ thêm các câu lóng bạn phân tích vào đó với cấu trúc `Câu chữ,Nhãn`.
+**1. Cập nhật Dataset Mạng xã hội:**
+- Mở file `data/processed/sarcasm_dataset.csv`.
+- Cập nhật thêm các câu bạn cần AI đánh giá với cấu trúc phân cách bởi dấu phẩy `text,label`:
    - `0`: Tiêu cực (Negative)
    - `1`: Trung tính (Neutral)
    - `2`: Tích cực (Positive)
-3. Chạy lệnh Train:
-   ```bash
-   python3 ml_engine/train.py
-   ```
-4. Sau khoảng 1-2 phút, bộ Não AI mới của bạn sẽ đẻ ra tại thư mục `saved_models/sarcasm_model`.
-5. Đóng máy chủ Web đang chạy ở (Bước 3) và chạy lệnh `uvicorn app.main:app --port 8001` lại để tải Cục Não Sát thủ này lên Web.
+
+**2. Khởi chạy luồng Train:**
+Thực thi lệnh Python để mô hình tự học:
+```bash
+python3 ml_engine/train.py
+```
+*(Mô hình sẽ tiến hành training, check loss và tự lưu phiên bản có F1-Score/Accuracy cao nhất).*
+
+**3. Tích hợp Mô hình mới lên App:**
+- File mô hình (hàng trăm MB) sẽ được sinh ra ở `saved_models/sarcasm_model`.
+- Thoát và Khởi động lại FastAPI WebServer, mô hình mới sẽ tự động được Push lên Production và API có thể nhận dạng các từ mới bạn vừa thêm ngay lập tức.
 
 ---
 
+## 📝 Giấy phép (License)
+Dự án được phân phối dưới giấy phép **MIT License**. Bạn có toàn quyền sử dụng thương mại, tinh chỉnh và phân phối.
