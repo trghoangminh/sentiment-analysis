@@ -12,3 +12,6 @@ mlflow
 prometheus-fastapi-instrumentator
 pytest
 httpx
+sentencepiece
+protobuf
+
