@@ -73,9 +73,11 @@ jobs:
     steps:
       - name: Pull Latest API Image 
         run: |
+          export PATH=$PATH:/Applications/Docker.app/Contents/Resources/bin:/usr/local/bin
           docker pull ghcr.io/${{ github.repository_owner }}/sentiment-api:latest
           
       - name: Restart Localhost Containers
         run: |
+          export PATH=$PATH:/Applications/Docker.app/Contents/Resources/bin:/usr/local/bin
           # Dùng docker compose để update các service
           docker compose up -d
