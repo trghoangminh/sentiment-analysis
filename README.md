@@ -72,6 +72,42 @@ Hoàn tất! Hãy mở trình duyệt Web và truy cập: **[http://127.0.0.1:80
 
 ---
 
+## 🐳 Khởi chạy Hệ thống MLOps Giám sát (End-to-End Stack)
+
+Hệ thống đã được nâng cấp lên kiến trúc giám sát toàn diện chạy độc lập từng phần bằng Docker. Để trải nghiệm và debug từng hệ thống một cách tuần tự, thực hiện các lệnh sau:
+
+**1. Khởi chạy MLFlow Tracking Server**
+Chạy MLFlow trước để chuẩn bị hệ thống lưu trữ log khi model tiến hành train.
+```bash
+docker compose up -d mlflow
+```
+👉 *Kiểm tra Dashboard quản lý Model tại: http://localhost:5001*
+
+**2. Khởi chạy Core Backend (FastAPI)**
+Model sẽ được tải lên và sẵn sàng phục vụ các API Endpoint.
+```bash
+docker compose up -d api
+```
+👉 *Kiểm tra Swagger API tại: http://localhost:8000/docs*
+
+**3. Khởi chạy Prometheus Scraper**
+Chạy bộ thu thập dữ liệu (Metrics) từ máy chủ API FastAPI.
+```bash
+docker compose up -d prometheus
+```
+👉 *Kiểm tra trạng thái quét Metrics tại: http://localhost:9091/targets*
+
+**4. Khởi chạy Grafana Visualizer**
+Kết nối giao diện biểu đồ với Prometheus.
+```bash
+docker compose up -d grafana
+```
+👉 *Truy cập: http://localhost:3001 (User: `admin` / Password: `admin`)*
+
+*(Mẹo: Bạn có thể bật cùng lúc toàn bộ hệ thống bằng lệnh `docker compose up --build -d`)*
+
+---
+
 ## 🛠 Hướng dẫn Tự Huấn luyện (Fine-Tuning Pipeline)
 
 Dù Transformer Models đã được cấu trúc tốt, nhưng do ngôn ngữ thay đổi liên tục, mô hình cần được học lại (Fine-tune) để nắm bắt biến thể GenZe hoặc các từ khoá hot trend. Bạn có thể tự cho AI đi học theo luồng sau:

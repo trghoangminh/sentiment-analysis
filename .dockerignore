@@ -1,0 +1,10 @@
+.git
+venv_dl
+venv
+saved_models
+mlruns
+results
+logs
+__pycache__
+*.pyc
+.env

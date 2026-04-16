@@ -5,6 +5,7 @@ from datasets import Dataset
 from transformers import AutoTokenizer, AutoModelForSequenceClassification, Trainer, TrainingArguments
 import numpy as np
 import evaluate
+import mlflow
 
 def train():
     print("--- Khởi động lò luyện AI (Fine-Tuning) ---")
@@ -78,12 +79,36 @@ def train():
     )
 
     print("5. BẮT ĐẦU HUẤN LUYỆN (Quá trình này tùy Mac có thể tốn 1 - 3 phút)...")
-    trainer.train()
+    
+    # Configure MLflow tracking
+    mlflow.set_tracking_uri(os.environ.get("MLFLOW_TRACKING_URI", "http://localhost:5001"))
+    mlflow.set_experiment("sentiment_analysis_finetuning")
+    
+    with mlflow.start_run():
+        mlflow.log_param("epochs", training_args.num_train_epochs)
+        mlflow.log_param("batch_size", training_args.per_device_train_batch_size)
+        mlflow.log_param("model_name", model_name)
 
-    print(f"6. LƯU BỘ TẠ MỚI: {output_model_dir}")
-    # Lưu lại bộ tạ (Weights) & Tokenizer để mốt xài
-    model.save_pretrained(output_model_dir)
-    tokenizer.save_pretrained(output_model_dir)
+        train_result = trainer.train()
+        
+        # Log custom metrics
+        metrics = train_result.metrics
+        mlflow.log_metrics(metrics)
+
+        print(f"6. LƯU BỘ TẠ MỚI: {output_model_dir}")
+        # Lưu lại bộ tạ (Weights) & Tokenizer để mốt xài
+        model.save_pretrained(output_model_dir)
+        tokenizer.save_pretrained(output_model_dir)
+        
+        # Log model directly to mlflow (if you want it accessible centrally)
+        try:
+            mlflow.transformers.log_model(
+                transformers_model={"model": model, "tokenizer": tokenizer},
+                artifact_path="model",
+            )
+        except Exception as e:
+            print(f"Could not log transformers model directly to MLflow: {e}")
+
     print("--- Train xong! Bây giờ quay lại model.py để nạp não mới nhé ---")
 
 if __name__ == "__main__":

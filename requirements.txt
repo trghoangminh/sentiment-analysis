@@ -8,3 +8,7 @@ evaluate
 scikit-learn
 pandas
 accelerate>=0.26.0
+mlflow
+prometheus-fastapi-instrumentator
+pytest
+httpx

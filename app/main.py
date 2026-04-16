@@ -4,6 +4,7 @@ from fastapi.responses import FileResponse
 from pydantic import BaseModel, Field
 import sys
 import os
+from prometheus_fastapi_instrumentator import Instrumentator
 
 # Ensure parent directory is in path so we can import ml_engine
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -15,6 +16,9 @@ app = FastAPI(
     description="Multi-lingual Sentiment API with latency tracking.",
     version="2.0.0"
 )
+
+# Instrument the app for Prometheus
+Instrumentator().instrument(app).expose(app)
 
 # Mount frontend folder for static assets if needed
 app.mount("/static", StaticFiles(directory=os.path.join(BASE_DIR, "frontend")), name="static")
