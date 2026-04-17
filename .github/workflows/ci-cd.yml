@@ -80,5 +80,7 @@ jobs:
       - name: Restart Localhost Containers
         run: |
           export PATH=$PATH:/Applications/Docker.app/Contents/Resources/bin:/usr/local/bin
-          # Dùng docker compose để update các service
+          # Tắt dứt điểm hệ thống cũ để xoá bỏ các Container bị kẹt
+          docker compose down
+          # Khởi động lại hệ thống với Image mới
           docker compose up -d
