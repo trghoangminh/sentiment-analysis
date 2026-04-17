@@ -74,13 +74,11 @@ jobs:
       - name: Pull Latest API Image 
         run: |
           export PATH=$PATH:/Applications/Docker.app/Contents/Resources/bin:/usr/local/bin
-          export DOCKER_DEFAULT_PLATFORM=linux/amd64
           echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-          docker pull ghcr.io/${{ github.repository_owner }}/sentiment-api:latest
+          docker pull --platform linux/amd64 ghcr.io/${{ github.repository_owner }}/sentiment-api:latest
           
       - name: Restart Localhost Containers
         run: |
           export PATH=$PATH:/Applications/Docker.app/Contents/Resources/bin:/usr/local/bin
-          export DOCKER_DEFAULT_PLATFORM=linux/amd64
           # Dùng docker compose để update các service
           docker compose up -d
