@@ -74,6 +74,7 @@ jobs:
       - name: Pull Latest API Image 
         run: |
           export PATH=$PATH:/Applications/Docker.app/Contents/Resources/bin:/usr/local/bin
+          echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
           docker pull ghcr.io/${{ github.repository_owner }}/sentiment-api:latest
           
       - name: Restart Localhost Containers
