@@ -1,4 +1,4 @@
-# 🧠 Diptronic Multi-lingual Sentiment Analysis
+# Diptronic Multi-lingual Sentiment Analysis
 
 <div align="center">
   <img src="https://img.shields.io/badge/Python-3.9+-blue.svg" alt="Python">
@@ -9,128 +9,137 @@
 
 <br>
 
-Dự án **Phân tích Sắc thái Ngôn ngữ (Sentiment Analysis)** ứng dụng Học Sâu (Deep Learning) và các mô hình ngôn ngữ lớn Transformer, được tối ưu hóa đặc biệt cho dữ liệu văn bản trên mạng xã hội (Sarcasm, Slang) hỗ trợ đa ngôn ngữ bao gồm **Tiếng Việt và Tiếng Anh**.
+The **Sentiment Analysis** project utilizes Deep Learning and large Transformer language models, specifically optimized for social media text (Sarcasm, Slang), with multi-lingual support including **Vietnamese and English**.
 
-Hệ thống được phát triển dựa trên kiến trúc **XLM-RoBERTa** tinh chỉnh (fine-tuned) từ Đại học Cardiff, tích hợp khả năng **Tự Huấn luyện (Fine-Tuning Pipeline)** trực tiếp cho phép mô hình liên tục cập nhật và thích nghi với các từ ngữ, câu cú hoặc xu hướng mới.
+The system is developed based on the fine-tuned **XLM-RoBERTa** architecture from Cardiff University, integrating a direct **Fine-Tuning Pipeline** that allows the model to continuously update and adapt to new vocabularies, sentences, or trends.
 
 ---
 
-## ✨ Tính năng Nổi bật
+## Project Scope & Metrics
 
-- **Kiến trúc MLOps chuyên nghiệp**: Cấu trúc phân tách rõ ràng giữa Frontend UI, Backend API và Machine Learning Engine. Dễ dàng triển khai thành các vi dịch vụ (Microservices).
-- **API Bất đồng bộ (Asynchronous) Tốc độ cao**: Xây dựng trên nền tảng cơ lõi **FastAPI** và Web Server Uvicorn cho phép xử lý hàng ngàn yêu cầu dự đoán với độ trễ cực thấp.
-- **Hỗ trợ Đa ngôn ngữ (English & Vietnamese)**: Đánh giá cực kỳ chính xác sắc thái câu chữ, khả năng đọc hiểu các ngữ cảnh phức tạp: từ lóng, khen ngược, mỉa mai, nói giảm nói tránh.
-- **Quy trình Huấn luyện Tự động**: Tích hợp sẵn Script để Fine-tune và Re-train mô hình với bộ dữ liệu tùy chỉnh.
+**Scope:**
+- Supports evaluating text with a maximum length of 512 tokens.
+- Best supported dialects: Vietnamese and English social media communication.
+- Logographic languages (Chinese, Japanese, Korean) are not supported in the current version.
 
-## 🏗 Kiến trúc Dự án (Architecture)
+**Success Metrics:**
+- **Business Metrics:** Reduce manual social media content moderation time by 40%.
+- **System Metrics:** Maintain API Latency `< 150ms`, achieve `99.9%` System Uptime.
+- **Model Metrics:** Achieve Accuracy and F1-Score `> 0.85` on the test dataset.
 
-Dự án áp dụng mô hình phân tách tầng lớp hiện đại:
+---
+
+## Key Features
+
+- **Professional MLOps Architecture**: Clear separation between Frontend UI, Backend API, and Machine Learning Engine. Easily deployable as microservices.
+- **High-speed Asynchronous API**: Built on the core **FastAPI** framework and Uvicorn Web Server, allowing it to process thousands of prediction requests with extremely low latency.
+- **Multi-lingual Support (English & Vietnamese)**: Highly accurate evaluation of sentence nuances, capable of reading and understanding complex contexts: slang, backhanded compliments, sarcasm, and euphemisms.
+- **Automated Training Pipeline**: Built-in scripts to fine-tune and re-train the model using custom datasets.
+
+## Architecture
+
+The project applies a modern multi-layered separation model:
 
 ```text
 sentiment-analysis-dl/
-├── app/                     # 🌐 Tầng Backend: Khởi tạo REST API bằng FastAPI (main.py)
-├── ml_engine/               # 🧠 Tầng MLOps: Script dự đoán (predict.py) & huấn luyện (train.py)
-├── frontend/                # 🎨 Tầng UI: Giao diện người dùng thuần HTML/CSS/JS (index.html)
-├── data/                    # 📚 Tầng Dữ liệu: Chứa các file CSV để nạp vào quy trình huấn luyện
-├── saved_models/            # 📦 Tầng Lưu trữ: Nơi lưu trữ bộ trọng số (Weights) sau khi training
-└── requirements.txt         # ⚙️ Danh sách thư viện và dependencies cài đặt
+├── app/                     # Backend Tier: REST API initialization via FastAPI (main.py)
+├── ml_engine/               # MLOps Tier: Inference script (predict.py) & training (train.py)
+├── frontend/                # UI Tier: Pure HTML/CSS/JS user interface (index.html)
+├── data/                    # Data Tier: Contains CSV files to feed the training process
+├── saved_models/            # Storage Tier: Stores model weights after training
+└── requirements.txt         # Libraries and dependencies list
 ```
 
-## 🚀 Hướng dẫn Cài đặt (Getting Started)
+## Getting Started
 
-### 1. Yêu cầu hệ thống
-* Python 3.9 trở lên
+### 1. System Requirements
+* Python 3.9 or higher
 * Git
 
-### 2. Cài đặt chi tiết
+### 2. Detailed Installation
 
-Khởi động Terminal và trỏ vào thư mục chứa code của bạn:
+Open Terminal and navigate to your code directory:
 ```bash
 cd /Users/trghoangminh/Desktop/sentiment-analysis-dl
 ```
 
-**Bước 2.1: Tạo môi trường ảo (Virtual Environment) để cô lập thư viện**
+**Step 2.1: Create a Virtual Environment to isolate libraries**
 ```bash
 python3 -m venv venv_dl
-source venv_dl/bin/activate  # Đối với macOS/Linux
-# venv_dl\Scripts\activate   # Đối với Windows
+source venv_dl/bin/activate  # For macOS/Linux
+# venv_dl\Scripts\activate   # For Windows
 ```
 
-**Bước 2.2: Tải và cài đặt các thư viện lõi ML**
+**Step 2.2: Download and install core ML libraries**
 ```bash
 pip install -r requirements.txt
 ```
-*(Lưu ý: Quá trình cài đặt PyTorch và HuggingFace Transformers có thể mất 1-2 phút tùy thuộc vào tốc độ mạng, do bộ thư viện DL khá nặng).*
+*(Note: Installing PyTorch and HuggingFace Transformers may take 1-2 minutes depending on network speed, as the DL libraries are quite heavy).*
 
-**Bước 2.3: Khởi động Web API & Backend**
+**Step 2.3: Start Web API & Backend**
 ```bash
 uvicorn app.main:app --port 8001 --reload
 ```
-Hoàn tất! Hãy mở trình duyệt Web và truy cập: **[http://127.0.0.1:8001](http://127.0.0.1:8001)** để trải nghiệm giao diện người dùng.
+Done! Open your Web browser and visit: **[http://127.0.0.1:8001](http://127.0.0.1:8001)** to experience the user interface.
 
-🔗 **Tài liệu API Tự động (Swagger UI)** sẽ khả dụng tại: [http://127.0.0.1:8001/docs](http://127.0.0.1:8001/docs)
+🔗 **Automated API Documentation (Swagger UI)** is available at: [http://127.0.0.1:8001/docs](http://127.0.0.1:8001/docs)
 
 ---
 
-## 🐳 Khởi chạy Hệ thống MLOps Giám sát (End-to-End Stack)
+## Running the End-to-End MLOps Monitoring Stack
 
-Hệ thống đã được nâng cấp lên kiến trúc giám sát toàn diện chạy độc lập từng phần bằng Docker. Để trải nghiệm và debug từng hệ thống một cách tuần tự, thực hiện các lệnh sau:
+The system has been upgraded to a comprehensive monitoring architecture running independently via Docker. To experience and debug each system sequentially, execute the following commands:
 
-**1. Khởi chạy MLFlow Tracking Server**
-Chạy MLFlow trước để chuẩn bị hệ thống lưu trữ log khi model tiến hành train.
+**1. Start MLFlow Tracking Server**
+Run MLFlow first to prepare the storage logging system when the model trains.
 ```bash
 docker compose up -d mlflow
 ```
-👉 *Kiểm tra Dashboard quản lý Model tại: http://localhost:5001*
+*Check Model management Dashboard at: http://localhost:5001*
 
-**2. Khởi chạy Core Backend (FastAPI)**
-Model sẽ được tải lên và sẵn sàng phục vụ các API Endpoint.
+**2. Start Core Backend (FastAPI)**
+The model will be loaded and ready to serve API Endpoints.
 ```bash
 docker compose up -d api
 ```
-👉 *Kiểm tra Swagger API tại: http://localhost:8080/docs*
+*Check Swagger API at: http://localhost:8080/docs*
 
-**3. Khởi chạy Prometheus Scraper**
-Chạy bộ thu thập dữ liệu (Metrics) từ máy chủ API FastAPI.
+**3. Start Prometheus Scraper**
+Run the Metrics scraper from the FastAPI server.
 ```bash
 docker compose up -d prometheus
 ```
-👉 *Kiểm tra trạng thái quét Metrics tại: http://localhost:9091/targets*
+*Check Metrics scanning status at: http://localhost:9091/targets*
 
-**4. Khởi chạy Grafana Visualizer**
-Kết nối giao diện biểu đồ với Prometheus.
+**4. Start Grafana Visualizer**
+Connect the dashboard interface with Prometheus.
 ```bash
 docker compose up -d grafana
 ```
-👉 *Truy cập: http://localhost:3001 (User: `admin` / Password: `admin`)*
+*Access: http://localhost:3001 (User: `admin` / Password: `admin`)*
 
-*(Mẹo: Bạn có thể bật cùng lúc toàn bộ hệ thống bằng lệnh `docker compose up --build -d`)*
+*(Tip: You can spin up the entire system at once using `docker compose up --build -d`)*
 
 ---
 
-## 🛠 Hướng dẫn Tự Huấn luyện (Fine-Tuning Pipeline)
+## Fine-Tuning Pipeline Guide
 
-Dù Transformer Models đã được cấu trúc tốt, nhưng do ngôn ngữ thay đổi liên tục, mô hình cần được học lại (Fine-tune) để nắm bắt biến thể GenZe hoặc các từ khoá hot trend. Bạn có thể tự cho AI đi học theo luồng sau:
+Although Transformer Models are well-structured, language evolves constantly. The model needs to be re-trained (Fine-tuned) to grasp GenZ variants or hot trend keywords. You can teach the AI autonomously via the following flow:
 
-**1. Cập nhật Dataset Mạng xã hội:**
-- Mở file `data/processed/sarcasm_dataset.csv`.
-- Cập nhật thêm các câu bạn cần AI đánh giá với cấu trúc phân cách bởi dấu phẩy `text,label`:
-   - `0`: Tiêu cực (Negative)
-   - `1`: Trung tính (Neutral)
-   - `2`: Tích cực (Positive)
+**1. Update the Social Media Dataset:**
+- Open `data/processed/sarcasm_dataset.csv`.
+- Add new sentences you want the AI to evaluate, comma-separated `text,label`:
+   - `0`: Negative
+   - `1`: Neutral
+   - `2`: Positive
 
-**2. Khởi chạy luồng Train:**
-Thực thi lệnh Python để mô hình tự học:
+**2. Trigger the Training Flow:**
+Execute the Python script for the model to self-train:
 ```bash
 python3 ml_engine/train.py
 ```
-*(Mô hình sẽ tiến hành training, check loss và tự lưu phiên bản có F1-Score/Accuracy cao nhất).*
+*(The model will train, check loss, and auto-save the version with the highest F1-Score/Accuracy).*
 
-**3. Tích hợp Mô hình mới lên App:**
-- File mô hình (hàng trăm MB) sẽ được sinh ra ở `saved_models/sarcasm_model`.
-- Thoát và Khởi động lại FastAPI WebServer, mô hình mới sẽ tự động được Push lên Production và API có thể nhận dạng các từ mới bạn vừa thêm ngay lập tức.
-
----
-
-## 📝 Giấy phép (License)
-Dự án được phân phối dưới giấy phép **MIT License**. Bạn có toàn quyền sử dụng thương mại, tinh chỉnh và phân phối.
+**3. Integrate the New Model into the App:**
+- A new model file (hundreds of MBs) will be generated in `saved_models/sarcasm_model`.
+- Stop and Restart the FastAPI WebServer. The new model will be pushed to Production automatically, allowing the API to recognize the new words you just added instantly.
