@@ -4,7 +4,7 @@ services:
     platform: linux/amd64
     container_name: sentiment_dl_api
     ports:
-      - "8000:8000"
+      - "8080:8000"
     volumes:
       - ./saved_models:/workspace/saved_models
     environment:

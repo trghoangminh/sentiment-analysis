@@ -88,7 +88,7 @@ Model sẽ được tải lên và sẵn sàng phục vụ các API Endpoint.
 ```bash
 docker compose up -d api
 ```
-👉 *Kiểm tra Swagger API tại: http://localhost:8000/docs*
+👉 *Kiểm tra Swagger API tại: http://localhost:8080/docs*
 
 **3. Khởi chạy Prometheus Scraper**
 Chạy bộ thu thập dữ liệu (Metrics) từ máy chủ API FastAPI.
