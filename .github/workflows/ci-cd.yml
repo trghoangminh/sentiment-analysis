@@ -69,6 +69,9 @@ jobs:
     needs: build-image
     runs-on: self-hosted
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    environment:
+      name: production
+      url: http://localhost:8080/docs
     
     steps:
       - name: Pull Latest API Image 
