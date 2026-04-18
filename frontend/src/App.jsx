@@ -5,10 +5,16 @@ function App() {
   const [text, setText] = useState('');
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [toastMsg, setToastMsg] = useState(null);
+
+  const showToast = (msg) => {
+    setToastMsg(msg);
+    setTimeout(() => setToastMsg(null), 3000);
+  };
 
   const handleAnalyze = async () => {
     if (!text.trim() || text.length < 2) {
-      alert("Please enter at least 2 characters.");
+      showToast("Please enter at least 2 characters.");
       return;
     }
     
@@ -26,14 +32,15 @@ function App() {
       });
 
       if (!response.ok) {
-        throw new Error(`API Error: ${response.statusText}`);
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.detail || `API Error: ${response.statusText}`);
       }
 
       const data = await response.json();
       setResult(data);
     } catch (err) {
       console.error(err);
-      alert('Failed to analyze. Check server connection.');
+      showToast(err.message || 'API Connection Failed. Please check if the server is running.');
     } finally {
       setLoading(false);
     }
@@ -45,6 +52,10 @@ function App() {
 
   return (
     <>
+      <div className={`toast-notification ${toastMsg ? 'show' : ''}`}>
+        {toastMsg}
+      </div>
+
       <div className="mesh-bg"></div>
 
       <nav className="navbar">

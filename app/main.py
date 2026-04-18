@@ -16,6 +16,20 @@ from sqlalchemy.orm import Session
 import redis
 import json
 import time
+import re
+
+def is_meaningful(text: str) -> bool:
+    # Ktra nguyên âm (Tiếng Việt & Tiếng Anh)
+    vowels = r'[aeiouyAEIOUYàáãạảăắằẳẵặâấầẩẫậèéẹẻẽêềếểễệđìíĩỉịòóõọỏôốồổỗộơớờởỡợùúũụủưứừửữựỳỵỷỹý]'
+    if not re.search(vowels, text):
+        return False
+    # Chặn gõ 5 ký tự lặp lại liên tiếp (VD: hhhhhh)
+    if re.search(r'(.)\1{4,}', text):
+        return False
+    # Chặn dãy dài hơn 15 ký tự không dấu cách (mã độc/chuỗi gõ bừa)
+    if len(text) > 15 and " " not in text:
+        return False
+    return True
 
 redis_client = redis.from_url(os.environ.get("REDIS_URL", "redis://redis:6379/0"), decode_responses=True)
 
@@ -57,12 +71,20 @@ def health_check():
 
 @app.post("/predict", response_model=SentimentResponse)
 def predict_sentiment(request: SentimentRequest, db: Session = Depends(get_db)):
+    if not is_meaningful(request.text):
+        raise HTTPException(status_code=400, detail="Invalid input detected! Please enter meaningful text (no gibberish).")
+
     try:
         start_cache_time = time.time()
         
         # 1. Check Redis Cache First
         cache_key = f"sentiment:{request.text}"
-        cached_result = redis_client.get(cache_key)
+        try:
+            cached_result = redis_client.get(cache_key)
+        except Exception as e:
+            print(f"Redis cache error: {e}")
+            cached_result = None
+            
         if cached_result:
             result = json.loads(cached_result)
             latency = round((time.time() - start_cache_time) * 1000, 2)
@@ -73,17 +95,24 @@ def predict_sentiment(request: SentimentRequest, db: Session = Depends(get_db)):
         sentiment, confidence, latency = sentiment_model.predict(request.text)
         
         # 3. Store in Postgres DB
-        record = PredictionRecord(
-            text=request.text,
-            sentiment=sentiment,
-            confidence=confidence,
-            latency_ms=latency
-        )
-        db.add(record)
-        db.commit()
+        try:
+            record = PredictionRecord(
+                text=request.text,
+                sentiment=sentiment,
+                confidence=confidence,
+                latency_ms=latency
+            )
+            db.add(record)
+            db.commit()
+        except Exception as e:
+            db.rollback()
+            print(f"Postgres logging error: {e}")
 
         # 4. Save to Redis Cache (persists indefinitely for this demo)
-        redis_client.set(cache_key, json.dumps({"sentiment": sentiment, "confidence": confidence}))
+        try:
+            redis_client.set(cache_key, json.dumps({"sentiment": sentiment, "confidence": confidence}))
+        except Exception as e:
+            pass
         
         return SentimentResponse(sentiment=sentiment, confidence=confidence, latency_ms=latency)
     except ValueError as e:

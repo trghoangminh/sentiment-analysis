@@ -66,6 +66,28 @@ body {
   box-shadow: 0 0 12px var(--accent-glow);
 }
 
+.toast-notification {
+  position: fixed;
+  top: -100px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(255, 75, 75, 0.95);
+  color: white;
+  padding: 12px 24px;
+  border-radius: 30px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  box-shadow: 0 10px 30px rgba(255, 75, 75, 0.3);
+  z-index: 9999;
+  backdrop-filter: blur(10px);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  pointer-events: none;
+}
+
+.toast-notification.show {
+  top: 20px;
+}
+
 .main-wrapper {
   flex: 1;
   display: flex;
