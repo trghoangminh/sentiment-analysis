@@ -31,6 +31,9 @@ frontend/build/
 
 # ML specific outputs and data
 data/
+pgdata/
+minio_data/
+evidently_workspace/
 results/
 saved_models/
 *.ckpt

@@ -10,14 +10,26 @@ services:
       - ./app:/workspace/app
     environment:
       - MLFLOW_TRACKING_URI=http://mlflow:5000
+      - DATABASE_URL=postgresql://sentiment_user:sentiment_pass@db:5432/sentiment_db
+      - REDIS_URL=redis://redis:6379/0
+      - AWS_ACCESS_KEY_ID=minioadmin
+      - AWS_SECRET_ACCESS_KEY=minioadmin
+      - MLFLOW_S3_ENDPOINT_URL=http://minio:9000
     depends_on:
       - mlflow
+      - db
+      - redis
+      - minio
 
   mlflow:
     image: ghcr.io/mlflow/mlflow:v2.10.2
     container_name: sentiment_mlflow
     ports:
       - "5001:5000"
+    environment:
+      - AWS_ACCESS_KEY_ID=minioadmin
+      - AWS_SECRET_ACCESS_KEY=minioadmin
+      - MLFLOW_S3_ENDPOINT_URL=http://minio:9000
     volumes:
       - ./mlruns:/mlruns
     command: >
@@ -25,7 +37,9 @@ services:
       --host 0.0.0.0
       --port 5000
       --backend-store-uri sqlite:////mlruns/mlflow.db
-      --default-artifact-root /mlruns/artifacts
+      --default-artifact-root s3://mlflow/
+    depends_on:
+      - minio_create_bucket
 
   prometheus:
     image: prom/prometheus:latest
@@ -63,3 +77,57 @@ services:
       - "4000:3000"
     depends_on:
       - api
+
+  db:
+    image: postgres:15-alpine
+    container_name: sentiment_postgres
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=sentiment_user
+      - POSTGRES_PASSWORD=sentiment_pass
+      - POSTGRES_DB=sentiment_db
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data
+
+  redis:
+    image: redis:alpine
+    container_name: sentiment_redis
+    ports:
+      - "6379:6379"
+
+  minio:
+    image: minio/minio:latest
+    container_name: sentiment_minio
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      - MINIO_ROOT_USER=minioadmin
+      - MINIO_ROOT_PASSWORD=minioadmin
+    command: server /data --console-address ":9001"
+    volumes:
+      - ./minio_data:/data
+
+  minio_create_bucket:
+    image: minio/mc
+    container_name: sentiment_minio_bucket_creator
+    depends_on:
+      - minio
+    entrypoint: >
+      /bin/sh -c "
+      /usr/bin/mc config host add myminio http://minio:9000 minioadmin minioadmin;
+      /usr/bin/mc mb myminio/mlflow --ignore-existing;
+      exit 0;
+      "
+
+  evidently_ui:
+    image: python:3.10
+    container_name: sentiment_evidently_ui
+    ports:
+      - "8001:8000"
+    volumes:
+      - ./evidently_workspace:/workspace
+    working_dir: /workspace
+    command: >
+      bash -c "pip install 'pydantic>=1.10,<2.0' evidently==0.4.15 && evidently ui --host 0.0.0.0 --port 8000 --workspace /workspace"

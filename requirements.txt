@@ -14,4 +14,8 @@ pytest
 httpx
 sentencepiece
 protobuf
-
+sqlalchemy
+psycopg2-binary
+redis
+boto3
+evidently
