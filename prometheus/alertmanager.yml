@@ -1,0 +1,26 @@
+route:
+  receiver: 'telegram_bot'
+  group_by: ['alertname']
+  group_wait: 10s
+  group_interval: 1m
+  repeat_interval: 1h
+
+receivers:
+- name: 'telegram_bot'
+  telegram_configs:
+  - bot_token: '8634667672:AAEtiE5bMt52NrCBrJ1MB_7UHH5-G_b0kVE'
+    api_url: 'https://api.telegram.org'
+    chat_id: 8569010173
+    parse_mode: 'MarkdownV2'
+    message: |
+      🚨 *CẢNH BÁO MLOPS HỆ THỐNG* 🚨
+      
+      *Tình trạng:* {{ .Status | toUpper }}
+      *Lỗi:* {{ .GroupLabels.alertname }}
+      
+      *Chi tiết:*
+      {{ range .Alerts }}
+      • *Mô tả:* {{ .Annotations.description }}
+      • *Mức độ:* {{ .Labels.severity }}
+      • *Phát hiện lúc:* {{ .StartsAt.Format "2006-01-02 15:04:05" }}
+      {{ end }}

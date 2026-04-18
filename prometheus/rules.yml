@@ -1,0 +1,11 @@
+groups:
+- name: MLOps_Alerts
+  rules:
+  - alert: API_Server_Sập
+    expr: up{job="fastapi_dl_app"} == 0
+    for: 1m
+    labels:
+      severity: critical
+    annotations:
+      summary: "API Server is down"
+      description: "Nhân viên Ops chú ý! FastAPI Container xử lý suy luận mô hình AI đã ngừng hoạt động hơn 1 phút. Hãy kiểm tra server ngay!"

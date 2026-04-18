@@ -1,6 +1,5 @@
 from fastapi import FastAPI, HTTPException
-from fastapi.staticfiles import StaticFiles
-from fastapi.responses import FileResponse
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 import sys
 import os
@@ -17,11 +16,17 @@ app = FastAPI(
     version="2.0.0"
 )
 
+# Allow React Frontend Port 4000 to hit this API
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Allows all origins for demo/local purposes. In production, list explicitly.
+    allow_credentials=False,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 # Instrument the app for Prometheus
 Instrumentator().instrument(app).expose(app)
-
-# Mount frontend folder for static assets if needed
-app.mount("/static", StaticFiles(directory=os.path.join(BASE_DIR, "frontend")), name="static")
 
 # Pydantic schemas for request/response validation
 class SentimentRequest(BaseModel):
@@ -31,11 +36,6 @@ class SentimentResponse(BaseModel):
     sentiment: str
     confidence: float
     latency_ms: float
-
-@app.get("/")
-def serve_ui():
-    html_path = os.path.join(BASE_DIR, "frontend", "index.html")
-    return FileResponse(html_path)
 
 @app.get("/health")
 def health_check():
