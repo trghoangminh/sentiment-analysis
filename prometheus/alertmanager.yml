@@ -11,16 +11,16 @@ receivers:
   - bot_token: '8634667672:AAEtiE5bMt52NrCBrJ1MB_7UHH5-G_b0kVE'
     api_url: 'https://api.telegram.org'
     chat_id: 8569010173
-    parse_mode: 'MarkdownV2'
+    parse_mode: 'HTML'
     message: |
-      🚨 *CẢNH BÁO MLOPS HỆ THỐNG* 🚨
+      🚨 <b>CẢNH BÁO MLOPS HỆ THỐNG</b> 🚨
       
-      *Tình trạng:* {{ .Status | toUpper }}
-      *Lỗi:* {{ .GroupLabels.alertname }}
+      <b>Tình trạng:</b> {{ .Status | toUpper }}
+      <b>Lỗi:</b> {{ .GroupLabels.alertname }}
       
-      *Chi tiết:*
+      <b>Chi tiết:</b>
       {{ range .Alerts }}
-      • *Mô tả:* {{ .Annotations.description }}
-      • *Mức độ:* {{ .Labels.severity }}
-      • *Phát hiện lúc:* {{ .StartsAt.Format "2006-01-02 15:04:05" }}
+      • <b>Mô tả:</b> {{ .Annotations.description }}
+      • <b>Mức độ:</b> {{ .Labels.severity }}
+      • <b>Phát hiện lúc:</b> {{ .StartsAt.Format "2006-01-02 15:04:05" }}
       {{ end }}
