@@ -130,4 +130,4 @@ services:
       - ./evidently_workspace:/workspace
     working_dir: /workspace
     command: >
-      bash -c "pip install 'pydantic>=1.10,<2.0' evidently==0.4.15 && evidently ui --host 0.0.0.0 --port 8000 --workspace /workspace"
+      bash -c "pip install --upgrade pip && pip install evidently fastapi uvicorn && evidently ui --host 0.0.0.0 --port 8000 --workspace /workspace"
